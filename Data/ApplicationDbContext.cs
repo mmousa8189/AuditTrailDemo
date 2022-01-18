@@ -7,7 +7,7 @@ using AuditTrailDemo.Models;
 
 namespace AuditTrailDemo.Data
 {
-    public class ApplicationDbContext : IdentityDbContext
+    public class ApplicationDbContext : AuditableIdentityContext
     {
         public ApplicationDbContext(DbContextOptions<ApplicationDbContext> options)
             : base(options)

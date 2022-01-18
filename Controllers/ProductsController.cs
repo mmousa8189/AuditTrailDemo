@@ -8,6 +8,7 @@ using Microsoft.EntityFrameworkCore;
 using AuditTrailDemo.Data;
 using AuditTrailDemo.Models;
 using Microsoft.AspNetCore.Authorization;
+using System.Security.Claims;
 
 namespace AuditTrailDemo.Controllers
 {
@@ -61,7 +62,7 @@ namespace AuditTrailDemo.Controllers
             if (ModelState.IsValid)
             {
                 _context.Add(product);
-                await _context.SaveChangesAsync();
+                await _context.SaveChangesAsync(User?.FindFirst(ClaimTypes.NameIdentifier).Value);
                 return RedirectToAction(nameof(Index));
             }
             return View(product);
@@ -100,7 +101,7 @@ namespace AuditTrailDemo.Controllers
                 try
                 {
                     _context.Update(product);
-                    await _context.SaveChangesAsync();
+                    await _context.SaveChangesAsync(User?.FindFirst(ClaimTypes.NameIdentifier).Value);
                 }
                 catch (DbUpdateConcurrencyException)
                 {
@@ -143,7 +144,7 @@ namespace AuditTrailDemo.Controllers
         {
             var product = await _context.Product.FindAsync(id);
             _context.Product.Remove(product);
-            await _context.SaveChangesAsync();
+            await _context.SaveChangesAsync(User?.FindFirst(ClaimTypes.NameIdentifier).Value);
             return RedirectToAction(nameof(Index));
         }
 
